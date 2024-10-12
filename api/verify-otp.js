@@ -21,8 +21,7 @@ module.exports = async (req, res) => {
         return res.status(404).send("OTP not found");
       }
 
-      // Check if OTP is expired
-      if (new Date() > new Date(record.expiresAt)) {
+      if (new Date().getTime() > new Date(record.expiresAt).getTime()) {
         return res.status(400).send("OTP expired");
       }
 
