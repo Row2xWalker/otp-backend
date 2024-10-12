@@ -21,9 +21,9 @@ module.exports = async (req, res) => {
         return res.status(404).send("OTP not found");
       }
 
-      if (new Date().getTime() > new Date(record.expiresAt).getTime()) {
+   /*    if (new Date().getTime() > new Date(record.expiresAt).getTime()) {
         return res.status(400).send("OTP expired");
-      }
+      } */
 
       // Check if OTP matches
       if (record.otp === parseInt(otp, 10)) {
