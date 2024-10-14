@@ -1,12 +1,4 @@
 const nodemailer = require('nodemailer');
-const { MongoClient } = require('mongodb');
-const crypto = require('crypto');
-
-const uri = process.env.MONGO_URI;
-const client = new MongoClient(uri);
-const db = client.db('otpDb');
-const otpsCollection = db.collection('otps');
-
 // Setup Nodemailer with Gmail
 const transporter = nodemailer.createTransport({
   service: 'gmail',
@@ -39,8 +31,6 @@ module.exports = async (req, res) => {
     } catch (error) {
       console.error(error);
       res.status(500).send("Failed to send status");
-    } finally {
-      await client.close();
     }
   } else {
     res.setHeader('Allow', ['POST']);
