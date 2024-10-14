@@ -11,11 +11,12 @@ app.use(bodyParser.json());
 // Import the OTP route handler
 const sendOtp = require('./api/send-otp');
 const verifyOtp = require('./api/verify-otp');
+const sendNotification = require('./api/send-notification');
 
 // Route to handle sending OTP
 app.post('/api/send-otp', sendOtp);
 app.post('/api/verify-otp', verifyOtp);
-
+app.post('/api/send-notification', sendNotification);
 // Handle invalid routes
 app.use((req, res) => {
   res.status(404).send("Route not found");
