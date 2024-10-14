@@ -37,13 +37,26 @@ module.exports = async (req, res) => {
 
     try {
       await client.connect();
-      // Store OTP in MongoDB with expiration
-      await otpsCollection.insertOne({
-        email,
-        otp,
-        expiresAt: new Date(Date.now() + 10 * 60 * 1000), // OTP expires in 10 minutes
-      });
 
+      // Set the new expiration time for the OTP
+      const expiresAt = new Date(Date.now() + 10 * 60 * 1000); // OTP expires in 10 minutes
+
+      // Upsert (update or insert) OTP for the email
+      const result = await otpsCollection.findOneAndUpdate(
+        { email }, // Find existing record by email
+        { 
+          $set: { 
+            otp, 
+            expiresAt 
+          } 
+        },
+        { 
+          returnDocument: 'after', // Return the updated document
+          upsert: true // Insert a new record if one doesn't exist
+        }
+      );
+
+      // Send the OTP email
       await transporter.sendMail(mailOptions);
       res.status(200).send("OTP sent to your email");
     } catch (error) {
